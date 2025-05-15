@@ -1,0 +1,209 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+    <record id="action_bidcom_state_property_window" model="ir.actions.act_window">
+        <field name="name">State Properties</field>
+        <field name="res_model">bidcom_state_property</field>
+        <field name="view_mode">kanban,list,form</field>
+    </record>
+
+    <record id="view_bidcom_state_property_kanban" model="ir.ui.view">
+        <field name="name">bidcom.state.property.kanban</field>
+        <field name="model">bidcom_state_property</field>
+        <field name="arch" type="xml">
+            <kanban
+                create="False"
+                edit="False"
+                string="State Property"
+                default_group_by="state"
+                group_create="false"
+            >
+                <field name="name" />
+                <field name="state" />
+                <templates>
+                    <t t-name="kanban-box">
+                        <div class="oe_kanban_global_click">
+                            <div>
+                                <strong>
+                                    <t t-esc="record.name.value" />
+                                </strong>
+                            </div>
+                        </div>
+                    </t>
+                </templates>
+            </kanban>
+        </field>
+    </record>
+
+    <record id="view_bidcom_state_property_list" model="ir.ui.view">
+        <field name="name">bidcom.state.property.list</field>
+        <field name="model">bidcom_state_property</field>
+        <field name="arch" type="xml">
+            <list
+                string="State Property"
+                decoration-success="state == 'sold'"
+                decoration-danger="state == 'cancelled'">
+                <field name="name" />
+                <field name="property_type_id" />
+                <field name="postcode" />
+                <field name="tag_ids" widget="many2many_tags" options="{'color_field': 'color'}" />
+                <field name="bedrooms" />
+                <field name="living_area" />
+                <field name="expected_price" />
+                <field name="selling_price" />
+            </list>
+        </field>
+    </record>
+
+    <record id="view_bidcom_state_property_search" model="ir.ui.view">
+        <field name="name">bidcom.state.property.search</field>
+        <field name="model">bidcom_state_property</field>
+        <field name="arch" type="xml">
+            <search string="Search State Properties">
+                <field name="name" string="Name" />
+                <field name="description" string="Description" />
+                <field name="postcode" string="Postcode" />
+
+                <field name="description" string="Name and description"
+                    filter_domain="['|', ('name', 'ilike', self), ('description', 'ilike', self)]" />
+
+
+                <filter string="Available" name="available"
+                    domain="[('date_availability', '&lt;', context_today())]" />
+
+
+                <filter string="Available Properties" name="available_properties"
+                    domain="['|', ('state', '=', 'new'), ('state', '=', 'offer received')]" />
+                <separator />
+
+                <!-- Group By section -->
+                <group expand="0" string="Group By">
+                    <filter string="Postal code" name="postcode" context="{'group_by': 'postcode'}" />
+                </group>
+
+            </search>
+        </field>
+    </record>
+
+    <record id="view_bidcom_state_property_form" model="ir.ui.view">
+        <field name="name">bidcom.state.property.form</field>
+        <field name="model">bidcom_state_property</field>
+        <field name="arch" type="xml">
+            <form>
+                <sheet>
+                    <header>
+
+                        <field name="state" invisible="1" />
+
+                        <!-- Botón SOLD solo visible cuando el estado es 'offer accepted' -->
+                        <button class="oe_highlight" name="button_sold" type="object" string="SOLD"
+                            invisible="state != 'offer accepted'" />
+
+
+                        <!-- Botón CANCEL solo visible cuando el estado es 'new' o 'offer received' -->
+                        <button class="oe_highlight" name="button_cancel" type="object"
+                            string="CANCEL"
+                            invisible="state in  ['new', 'offer accepted', 'sold', 'cancelled']" />
+
+                        <field name="state" widget="statusbar"
+                            statusbar_visible="new,offer received,offer accepted,sold" />
+                    </header>
+
+                    <group col="12">
+                        <group colspan="6">
+                            <field name="name" />
+                            <field name="date_availability" />
+                            <field name="property_type_id" />
+                            <field name="tag_ids" widget="many2many_tags"
+                                options="{'color_field': 'color'}" />
+                        </group>
+
+                        <group colspan="6">
+                            <field name="expected_price" />
+                            <field name="selling_price" />
+                            <field name="best_offer" />
+                            <field name="total_area" />
+                        </group>
+
+                    </group>
+
+                    <notebook>
+                        <page string="Description">
+                            <group>
+
+                                <field name="description" />
+                                <field name="postcode" />
+                                <field name="bedrooms" />
+                                <field name="living_area" />
+                                <field name="facades" />
+                            </group>
+                        </page>
+
+                        <page string="Garage">
+                            <group>
+                                <field name="has_garden" />
+                                <field name="garage" />
+                                <field name="garden_area" />
+                                <field name="garden_orientation" />
+                            </group>
+                        </page>
+
+                        <page string="Offers">
+                            <group>
+                                <field name="offer_ids" string="">
+                                    <list editable="bottom" delete="0"
+                                        create="1"
+                                        decoration-success="status == 'accepted'"
+                                        decoration-danger="status == 'refused'">
+                                        <field name="partner_id" />
+                                        <field name="validity"
+                                            string="Validaty (days)"
+                                            width="100px;" />
+                                        <field name="date_deadline" />
+                                        <field name="price" avg='Average' />
+                                        <groupby width="10px;"
+                                            invisible="is_offer_accepted or is_offer_accepted">
+                                            <button name="action_accepted"
+                                                string=""
+                                                type="object"
+                                                icon="fa-check"
+                                                invisible="is_offer_accepted" />
+                                            <button name="action_refused"
+                                                string=""
+                                                type="object"
+                                                icon="fa-times"
+                                                invisible="is_offer_accepted" />
+                                        </groupby>
+                                        <field name="status"
+                                            widget="badge"
+                                            width="80px;"
+                                            decoration-success="status == 'accepted'"
+                                            decoration-danger="status == 'refused'" />
+
+                                    </list>
+                                </field>
+                            </group>
+                        </page>
+
+                        <page string="Other info">
+                            <group>
+                                <field name="partner_id" readonly="True" />
+                                <field name="user_id" />
+                            </group>
+                        </page>
+
+                        <page string="Extensions" name="extension_page">
+                            <!-- 🔍 Marcador de posición para futuras extensiones -->
+                            <div name="extension_hook" class="oe_placeholder">
+                                <!-- Aquí se inyectarán componentes desde otros módulos -->
+                            </div>
+                        </page>
+
+                    </notebook>
+                </sheet>
+            </form>
+
+        </field>
+    </record>
+
+</odoo>

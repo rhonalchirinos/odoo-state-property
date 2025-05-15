@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="action_bidcom_regionalization_window" model="ir.actions.act_window">
+        <field name="name">Regionalización</field>
+        <field name="res_model">bidcom_regionalization</field>
+        <field name="view_mode">list</field>
+    </record>
+
+    <record id="view_bidcom_regionalization_list" model="ir.ui.view">
+        <field name="name">bidcom.regionalization.list</field>
+        <field name="model">bidcom_regionalization</field>
+        <field name="arch" type="xml">
+            <list string="Regionalization">
+                <field name="name" />
+                <field name="value" />
+            </list>
+        </field>
+    </record>
+</odoo>

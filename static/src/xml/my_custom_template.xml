@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<templates xml:space="preserve">
+    <t t-name="regionalizacion.my_custom_view_action">
+        <div t-att-class="'my-custom-style'">
+            <h1>Hello Bidcom :-)</h1>
+        </div>
+    </t>
+</templates>

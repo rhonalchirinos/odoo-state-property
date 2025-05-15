@@ -1,0 +1,11 @@
+
+/* my_component.css */
+.my-custom-style {
+    color: blue;
+    padding: 10px;
+}
+
+.my-custom-style.active {
+    background-color: lightblue;
+    font-weight: bold;
+}

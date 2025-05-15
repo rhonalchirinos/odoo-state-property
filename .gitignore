@@ -1,0 +1,19 @@
+# Ignore docker folder
+docker/
+config/
+enterprise/
+
+# Python-related ignores
+__pycache__/
+*.py[cod]
+*.pyo
+*.pyd
+*.pdb
+*.egg
+*.egg-info/
+dist/
+build/
+*.env
+*.venv
+.env/
+.venv/

@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+    <menuitem id="menu_bidcom_app" name="BIDCOM" sequence="1"
+        web_icon="regionalizacion,static/description/icon.png" />
+
+    <menuitem
+        id="menu_bidcom_home" name="Home" sequence="50"
+        parent="menu_bidcom_app" action="action_bidcom_home_window"
+    />
+
+    <menuitem
+        id="menu_bidcom_regionalization" name="Regionalization" sequence="51"
+        parent="menu_bidcom_app" action="action_bidcom_regionalization_window"
+    />
+
+    <menuitem
+        id="menu_bidcom_state_property" name="State Property" sequence="52"
+        parent="menu_bidcom_app" action="action_bidcom_state_property_window"
+    />
+
+</odoo>

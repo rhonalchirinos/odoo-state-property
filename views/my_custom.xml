@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="action_bidcom_home_window" model="ir.actions.client">
+        <field name="name">My Custom Template</field>
+        <field name="tag">regionalizacion.my_custom_view_action</field>
+    </record>
+</odoo>
